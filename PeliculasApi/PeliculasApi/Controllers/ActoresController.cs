@@ -11,9 +11,9 @@ namespace PeliculasApi.Controllers
     public class ActoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public ActoresController(ApplicationDbContext context, Mapper mapper)
+        public ActoresController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -23,16 +23,11 @@ namespace PeliculasApi.Controllers
         public async Task<ActionResult<List<ActorDTO>>> ObtenerListaActores()
         {
             var entidades = await _context.Actores.ToListAsync();
-
-            if (entidades == null)
-            {
-                return BadRequest();
-            }
-            return Ok(_mapper.Map<List<ActorDTO>>(entidades));
+            var dto = _mapper.Map<List<ActorDTO>>(entidades);
+            return Ok(dto);
         }
 
         [HttpGet("ObtenerActorPorId/{id}")]
-
         public async Task<ActionResult<ActorDTO>> ObtenerActorPorId(int id)
         {
             var entidad = await _context.Actores.FirstOrDefaultAsync(x => x.Id == id);
@@ -45,7 +40,6 @@ namespace PeliculasApi.Controllers
         }
 
         [HttpPost("CrearActor")]
-
         public async Task<ActionResult> CrearActor([FromBody] ActorCreacionDTO data)
         {
             if (data == null)
@@ -57,10 +51,9 @@ namespace PeliculasApi.Controllers
             _context.Actores.Add(entidad);
 
             await _context.SaveChangesAsync();
-            var actorDTO = _mapper.Map<ActorDTO>(entidad);
+            var actorDTO = _mapper.Map<ActorCreacionDTO>(entidad);
 
             return Ok(actorDTO);
-
         }
 
     }
