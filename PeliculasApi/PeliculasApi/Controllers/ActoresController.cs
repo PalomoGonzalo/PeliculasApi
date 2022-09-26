@@ -51,12 +51,7 @@ namespace PeliculasApi.Controllers
             _context.Actores.Add(entidad);
 
             await _context.SaveChangesAsync();
-<<<<<<< HEAD
             var actorDTO = _mapper.Map<ActorDTO>(entidad);
-=======
-            var actorDTO = _mapper.Map<ActorCreacionDTO>(entidad);
-
->>>>>>> 4c0ad7531bd11abefa8e285ed8783c8cd8579d96
             return Ok(actorDTO);
         }
 
