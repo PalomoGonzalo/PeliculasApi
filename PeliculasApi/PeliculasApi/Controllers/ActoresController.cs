@@ -11,9 +11,9 @@ namespace PeliculasApi.Controllers
     public class ActoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public ActoresController(ApplicationDbContext context, Mapper mapper)
+        public ActoresController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -58,10 +58,22 @@ namespace PeliculasApi.Controllers
 
             await _context.SaveChangesAsync();
             var actorDTO = _mapper.Map<ActorDTO>(entidad);
-
             return Ok(actorDTO);
-
         }
+
+        [HttpPut("ModificarPorId/{id}")]
+        public async Task<IActionResult> ModificarPorId([FromBody] ActorCreacionDTO data, int id)
+        {
+            var entidad= _mapper.Map<Actor>(data);
+            entidad.Id=id;
+            _context.Entry(entidad).State= EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok("Se modifico correctamente");
+        }
+
+
+
+        
 
     }
 }
