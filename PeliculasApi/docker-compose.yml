@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  peliculasapi:
+    image: ${DOCKER_REGISTRY-}peliculasapi
+    build:
+      context: .
+      dockerfile: PeliculasApi\Dockerfile
